@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CombineX",
+        "repositoryURL": "https://github.com/cx-org/CombineX",
+        "state": {
+          "branch": "master",
+          "revision": "a3b8e8bc061467699c745522b471986b34dde489",
+          "version": null
+        }
+      },
+      {
+        "package": "CXFoundation",
+        "repositoryURL": "https://github.com/cx-org/CXFoundation",
+        "state": {
+          "branch": "master",
+          "revision": "a10b1321478c2fb93ddad6167f6eb2c54a75ee9c",
+          "version": null
+        }
+      },
+      {
+        "package": "Nimble",
+        "repositoryURL": "https://github.com/Quick/Nimble.git",
+        "state": {
+          "branch": null,
+          "revision": "f8657642dfdec9973efc79cc68bcef43a653a2bc",
+          "version": "8.0.2"
+        }
+      },
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/Quick/Quick.git",
+        "state": {
+          "branch": null,
+          "revision": "94df9b449508344667e5afc7e80f8bcbff1e4c37",
+          "version": "2.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
