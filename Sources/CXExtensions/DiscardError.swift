@@ -6,7 +6,7 @@ import CXFoundation
 
 extension Publisher {
     
-    public func discardError<T>(_ transform: @escaping (Self.Output) -> T?) -> Publishers.DiscardError<Self> {
+    public func discardError() -> Publishers.DiscardError<Self> {
         return .init(upstream: self)
     }
 }

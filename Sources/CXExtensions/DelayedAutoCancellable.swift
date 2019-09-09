@@ -6,7 +6,7 @@ import CXFoundation
 
 extension Cancellable {
     
-    public func cancel<S: Scheduler>(after interval: S.SchedulerTimeType.Stride, tolerance: S.SchedulerTimeType.Stride, scheduler: S, options: S.SchedulerOptions?) -> DelayedAutoCancellable {
+    public func cancel<S: Scheduler>(after interval: S.SchedulerTimeType.Stride, tolerance: S.SchedulerTimeType.Stride = .zero, scheduler: S, options: S.SchedulerOptions? = nil) -> DelayedAutoCancellable {
         let cancel = DelayedAutoCancellable(self)
         scheduler.schedule(after: scheduler.now.advanced(by: interval), tolerance: tolerance, options: options) {
             cancel.cancel()

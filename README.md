@@ -7,6 +7,35 @@
 
 A collection of useful extensions for [Combine](https://developer.apple.com/documentation/combine) and [CombineX](https://github.com/cx-org/CombineX).
 
+## API
+
+### Publisher
+
+#### DiscardError
+
+Discard error from upstream and complete.
+
+```swift
+// Output: (data: Data, response: URLResponse), Failure: URLError
+let upstream = URLSession.shared.cx.dataTaskPublisher(for: url)
+
+// Output: (data: Data, response: URLResponse), Failure: Never
+let pub = upstream.discardError()
+```
+
+### Cancellable
+
+- DelayedAutoCancellable
+
+Auto cancel after delay.
+
+```swift
+let delayedCancel = upstream
+    .sink { o in
+    }
+    .cancel(after .second(1), scheduler: mainScheduler)
+```
+
 ## Install
 
 ### Swift Package Manager
