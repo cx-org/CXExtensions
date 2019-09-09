@@ -25,7 +25,7 @@ let pub = upstream.discardError()
 
 ### Cancellable
 
-- DelayedAutoCancellable
+#### DelayedAutoCancellable
 
 Auto cancel after delay.
 
