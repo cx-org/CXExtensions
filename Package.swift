@@ -1,14 +1,7 @@
 // swift-tools-version:5.0
 
+import Foundation
 import PackageDescription
-
-#if USE_COMBINE
-let cxDep = Package.Dependency.package(url: "https://github.com/cx-org/CXCompatible", .branch("master"))
-let cxDepName: Target.Dependency = "CXCompatible"
-#else
-let cxDep = Package.Dependency.package(url: "https://github.com/cx-org/CXFoundation", .branch("master"))
-let cxDepName: Target.Dependency = "CXFoundation"
-#endif
 
 let package = Package(
     name: "CXExtensions",
@@ -16,10 +9,11 @@ let package = Package(
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
     dependencies: [
-        cxDep
+        .package(url: "https://github.com/cx-org/CXCompatible", .branch("master")),
+        .package(url: "https://github.com/cx-org/CXFoundation", .branch("master"))
     ],
     targets: [
-        .target(name: "CXExtensions", dependencies: [cxDepName]),
+        .target(name: "CXExtensions", dependencies: ["CXCompatible", "CXFoundation"]),
         .testTarget(name: "CXExtensionsTests", dependencies: ["CXExtensions"]),
     ]
 )

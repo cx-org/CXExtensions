@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "CXCompatible",
+        "repositoryURL": "https://github.com/cx-org/CXCompatible",
+        "state": {
+          "branch": "master",
+          "revision": "71435635672eaf2f36005995a2580b65a9344fa7",
+          "version": null
+        }
+      },
+      {
         "package": "CXFoundation",
         "repositoryURL": "https://github.com/cx-org/CXFoundation",
         "state": {
