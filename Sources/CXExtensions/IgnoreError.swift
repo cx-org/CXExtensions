@@ -6,14 +6,14 @@ import CXFoundation
 
 extension Publisher {
     
-    public func discardError() -> Publishers.DiscardError<Self> {
+    public func ignoreError() -> Publishers.IgnoreError<Self> {
         return .init(upstream: self)
     }
 }
 
 extension Publishers {
     
-    public struct DiscardError<Upstream>: Publisher where Upstream: Publisher {
+    public struct IgnoreError<Upstream>: Publisher where Upstream: Publisher {
         
         public typealias Output = Upstream.Output
         public typealias Failure = Never

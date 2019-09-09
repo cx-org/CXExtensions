@@ -12,16 +12,16 @@ A collection of useful extensions for [Combine](https://developer.apple.com/docu
 
 ### Publisher
 
-#### DiscardError
+#### IgnoreError
 
-Discard error from upstream and complete.
+Ignore error from upstream and complete.
 
 ```swift
 // Output: (data: Data, response: URLResponse), Failure: URLError
 let upstream = URLSession.shared.cx.dataTaskPublisher(for: url)
 
 // Output: (data: Data, response: URLResponse), Failure: Never
-let pub = upstream.discardError()
+let pub = upstream.ignoreError()
 ```
 
 ### Cancellable
@@ -58,3 +58,21 @@ pod 'CXExtensions', :git => 'https://github.com/cx-org/CXExtensions.git', :branc
 ```carthage
 github "cx-org/CXExtensions" "master"
 ```
+
+## Use with Combine
+
+You can change the underlying dependency to `Combine` by passing `USE_COMBINE` to the target's build configurations. For example, if you are using CocoaPods, you can modify your podfile like below:
+
+```ruby
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == 'CXExtensions'
+            target.build_configurations.each do |config|
+                config.build_settings['OTHER_SWIFT_FLAGS'] = '-DUSE_COMBINE'
+            end
+        end
+    end
+end
+```
+
+If you are using Carthage, you should be able to use `XCODE_XCCONFIG_FILE` to do that.
