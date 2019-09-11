@@ -692,7 +692,7 @@
          isa = "PBXFileReference";
          explicitFileType = "sourcecode.swift";
          name = "Package.swift";
-         path = "/Users/quentin/Documents/MyCodes/CXExtensions/.build/checkouts/CombineX/Package.swift";
+         path = "/Users/quentinmed/Documents/Codes/CXExtensions/.build/checkouts/CombineX/Package.swift";
          sourceTree = "<group>";
       };
       "OBJ_177" = {
@@ -832,17 +832,17 @@
          isa = "PBXFileReference";
          explicitFileType = "sourcecode.swift";
          name = "Package.swift";
-         path = "/Users/quentin/Documents/MyCodes/CXExtensions/.build/checkouts/CXCompatible/Package.swift";
+         path = "/Users/quentinmed/Documents/Codes/CXExtensions/.build/checkouts/CXCompatible/Package.swift";
          sourceTree = "<group>";
       };
       "OBJ_197" = {
          isa = "PBXGroup";
          children = (
-            "CXCompatible::CXCompatible::Product",
-            "CXFoundation::CXFoundation::Product",
-            "CXExtensions::CXExtensionsTests::Product",
             "CombineX::CombineX::Product",
-            "CXExtensions::CXExtensions::Product"
+            "CXCompatible::CXCompatible::Product",
+            "CXExtensions::CXExtensions::Product",
+            "CXExtensions::CXExtensionsTests::Product",
+            "CXFoundation::CXFoundation::Product"
          );
          name = "Products";
          path = "";
@@ -2226,7 +2226,7 @@
          isa = "PBXFileReference";
          explicitFileType = "sourcecode.swift";
          name = "Package.swift";
-         path = "/Users/quentin/Documents/MyCodes/CXExtensions/.build/checkouts/CXFoundation/Package.swift";
+         path = "/Users/quentinmed/Documents/Codes/CXExtensions/.build/checkouts/CXFoundation/Package.swift";
          sourceTree = "<group>";
       };
       "OBJ_350" = {
