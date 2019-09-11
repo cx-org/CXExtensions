@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name         = "CXExtensions"
-    s.version      = "0.0.1-beta.3"
+    s.version      = "0.0.1-beta.4"
     s.summary      = "A collection of useful extensions for Combine and CombineX."
     s.homepage     = "https://github.com/cx-org/CXExtensions"
     s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
     s.source = { :git => "https://github.com/cx-org/CXExtensions.git", :tag => "#{s.version}" }
     s.source_files = "Sources/CXExtensions/**/*.swift"
 
-    s.dependency 'CXFoundation', '~> 0.0.1-beta.3'
-    s.dependency 'CXCompatible', '~> 0.0.1-beta.2'
+    s.dependency 'CXFoundation', '~> 0.0.1-beta.5'
+    s.dependency 'CXCompatible', '~> 0.0.1-beta.4'
   
 end
   
