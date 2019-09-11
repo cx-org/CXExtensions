@@ -1,10 +1,10 @@
 # CXExtensions
 
-![release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)
+[![release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)](https://github.com/cx-org/CXExtensions/releases)
 ![install](https://img.shields.io/badge/install-spm%20%7C%20cocoapods%20%7C%20carthage-ff69b4)
 ![platform](https://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-lightgrey)
 ![license](https://img.shields.io/github/license/cx-org/CXExtensions?color=black)
-[![dicord](https://img.shields.io/badge/chat-discord-blue)](https://discord.gg/cresT3X)
+[![dicord](https://img.shields.io/badge/chat-discord-9cf)](https://discord.gg/cresT3X)
 
 A collection of useful extensions for [Combine](https://developer.apple.com/documentation/combine) and [CombineX](https://github.com/cx-org/CombineX).
 
