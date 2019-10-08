@@ -1,8 +1,4 @@
-#if USE_COMBINE
-import CXCompatible
-#else
-import CXFoundation
-#endif
+import CXShim
 
 extension Cancellable {
     
