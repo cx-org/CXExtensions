@@ -1,6 +1,5 @@
 // swift-tools-version:5.0
 
-import Foundation
 import PackageDescription
 
 let package = Package(
@@ -10,10 +9,15 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/cx-org/CXCompatible", .branch("master")),
-        .package(url: "https://github.com/cx-org/CXFoundation", .branch("master"))
     ],
     targets: [
-        .target(name: "CXExtensions", dependencies: ["CXCompatible", "CXFoundation"]),
-        .testTarget(name: "CXExtensionsTests", dependencies: ["CXExtensions"]),
+        .target(
+            name: "CXExtensions",
+            dependencies: [
+                .product(name: "CXShim", package: "CXCompatible"),
+            ]),
+        .testTarget(
+            name: "CXExtensionsTests",
+            dependencies: ["CXExtensions"]),
     ]
 )
