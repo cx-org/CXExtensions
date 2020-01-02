@@ -1,16 +1,15 @@
 # CXExtensions
 
-[![release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)](https://github.com/cx-org/CXExtensions/releases)
-![install](https://img.shields.io/badge/install-spm%20%7C%20cocoapods%20%7C%20carthage-ff69b4)
-![platform](https://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-lightgrey)
-![license](https://img.shields.io/github/license/cx-org/CXExtensions?color=black)
-[![dicord](https://img.shields.io/badge/chat-discord-9cf)](https://discord.gg/9vzqgZx)
+[![Release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)](https://github.com/cx-org/CXExtensions/releases)
+![Install](https://img.shields.io/badge/install-Swift_PM%20%7C%20CocoaPods-ff69b4)
+![Supported Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey)
+[![Discord](https://img.shields.io/badge/chat-discord-9cf)](https://discord.gg/9vzqgZx)
 
-A collection of useful extensions for [Combine](https://developer.apple.com/documentation/combine) and [CombineX](https://github.com/cx-org/CombineX).
+A collection of useful extensions for Combine.
+
+CXExtensions is [Combine Compatible Package](https://github.com/cx-org/CombineX/wiki/Combine-Compatible-Package). You're free to switch underlying Combine implementation between [CombineX](https://github.com/cx-org/CombineX) and [Combine](https://developer.apple.com/documentation/combine).
 
 ## API
-
-### Publisher
 
 #### IgnoreError
 
@@ -24,55 +23,36 @@ let upstream = URLSession.shared.cx.dataTaskPublisher(for: url)
 let pub = upstream.ignoreError()
 ```
 
-### Cancellable
-
 #### DelayedAutoCancellable
 
 Auto cancel after delay.
 
 ```swift
-let delayedCancel = upstream
+let delayedCanceller = upstream
     .sink { o in
+        print(o)
     }
-    .cancel(after .second(1), scheduler: mainScheduler)
+    .cancel(after .second(1), scheduler: DispatchQueue.main.cx)
 ```
 
-## Install
+## Get Started
 
-### Swift Package Manager
+### Requirements
+
+- Swift 5.0 (Xcode 10.2)
+
+### Installation
+
+#### Swift Package Manager (Recommended)
 
 ```swift
-dependencies.append(
-    .package(url: "https://github.com/cx-org/CXExtensions", .branch("master"))
+package.dependencies.append(
+    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.1.0"))
 )
 ```
 
-### CocoaPods
+#### CocoaPods
 
 ```ruby
-pod 'CXExtensions', :git => 'https://github.com/cx-org/CXExtensions.git', :branch => 'master'
+pod 'CXExtensions', '~> 0.1.0'
 ```
-
-### Carthage
-
-```carthage
-github "cx-org/CXExtensions" "master"
-```
-
-## Use with Combine
-
-You can change the underlying dependency to `Combine` by passing `USE_COMBINE` to the target's build configurations. For example, if you are using CocoaPods, you can modify your podfile like below:
-
-```ruby
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        if target.name == 'CXExtensions'
-            target.build_configurations.each do |config|
-                config.build_settings['OTHER_SWIFT_FLAGS'] = '-DUSE_COMBINE'
-            end
-        end
-    end
-end
-```
-
-If you are using Carthage, you should be able to use `XCODE_XCCONFIG_FILE` to do that.
