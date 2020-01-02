@@ -9,7 +9,7 @@ extension Publisher {
 
 extension Publishers {
     
-    public struct IgnoreError<Upstream>: Publisher where Upstream: Publisher {
+    public struct IgnoreError<Upstream: Publisher>: Publisher {
         
         public typealias Output = Upstream.Output
         public typealias Failure = Never
@@ -20,7 +20,7 @@ extension Publishers {
             self.upstream = upstream
         }
         
-        public func receive<S>(subscriber: S) where S : Subscriber, Failure == S.Failure, Output == S.Input {
+        public func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
             self.upstream
                 .catch { _ in
                     Empty()

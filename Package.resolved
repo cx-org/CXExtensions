@@ -5,27 +5,18 @@
         "package": "CombineX",
         "repositoryURL": "https://github.com/cx-org/CombineX",
         "state": {
-          "branch": "master",
-          "revision": "6239d172a1c900a2438d3fbec91b3999a5d6d9f2",
-          "version": null
+          "branch": null,
+          "revision": "273b580b464f7d6f872cf5319c5785211443cf6f",
+          "version": "0.1.1"
         }
       },
       {
-        "package": "CXCompatible",
-        "repositoryURL": "https://github.com/cx-org/CXCompatible",
+        "package": "CRuntime",
+        "repositoryURL": "https://github.com/wickwirew/CRuntime.git",
         "state": {
-          "branch": "master",
-          "revision": "4096c2774f33e0820a2b2ce025819fba1fd94b33",
-          "version": null
-        }
-      },
-      {
-        "package": "CXFoundation",
-        "repositoryURL": "https://github.com/cx-org/CXFoundation",
-        "state": {
-          "branch": "master",
-          "revision": "e46c844dcdfa37ae07a8c7a7d8dca31ccffb5643",
-          "version": null
+          "branch": null,
+          "revision": "95f911318d8c885f6fc05e971471f94adfd39405",
+          "version": "2.1.2"
         }
       },
       {
@@ -44,6 +35,15 @@
           "branch": null,
           "revision": "33682c2f6230c60614861dfc61df267e11a1602f",
           "version": "2.2.0"
+        }
+      },
+      {
+        "package": "Runtime",
+        "repositoryURL": "https://github.com/wickwirew/Runtime.git",
+        "state": {
+          "branch": null,
+          "revision": "61c9776f47d2951bdc562486ad348e5e1ca2e180",
+          "version": "2.1.1"
         }
       }
     ]
