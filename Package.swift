@@ -8,14 +8,12 @@ let package = Package(
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/cx-org/CXCompatible", .branch("master")),
+        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.1.0")),
     ],
     targets: [
         .target(
             name: "CXExtensions",
-            dependencies: [
-                .product(name: "CXShim", package: "CXCompatible"),
-            ]),
+            dependencies: ["CXShim"]),
         .testTarget(
             name: "CXExtensionsTests",
             dependencies: ["CXExtensions"]),
