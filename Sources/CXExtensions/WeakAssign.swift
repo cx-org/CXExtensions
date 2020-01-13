@@ -4,7 +4,7 @@ import CXUtility
 extension Publisher where Failure == Never {
     
     public func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Output>, weaklyOn object: Root) -> AnyCancellable {
-        let assign = Subscribers.Assign(object: object, keyPath: keyPath)
+        let assign = Subscribers.WeakAssign(object: object, keyPath: keyPath)
         self.subscribe(assign)
         return AnyCancellable(assign)
     }
