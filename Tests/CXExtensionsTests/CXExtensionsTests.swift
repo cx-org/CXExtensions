@@ -6,10 +6,10 @@ final class CXExtensionsTests: XCTestCase {
     
     func testExample() {
         // we just need it to compile before we can use CXTestUtility.
-        _ = Just(1).invoke(CXExtensionsTests.foo, weaklyOn: self)
+        _ = Just(Void()).invoke(CXExtensionsTests.foo, weaklyOn: self)
     }
     
-    func foo(_ x: Int) {}
+    func foo() {}
 
     static var allTests = [
         ("testExample", testExample),
