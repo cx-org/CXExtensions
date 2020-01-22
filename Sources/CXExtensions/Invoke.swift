@@ -37,7 +37,7 @@ extension Subscribers {
         
         public typealias Failure = Never
         
-        enum RefBox {
+        private enum RefBox {
             
             final class WeakBox {
                 weak var object: Target?
@@ -65,7 +65,7 @@ extension Subscribers {
             }
         }
         
-        enum Method {
+        private enum Method {
             case withParameter((Target) -> (Input) -> Void)
             case withoutParameter((Target) -> () -> Void)
             
@@ -84,7 +84,7 @@ extension Subscribers {
         private let lock = Lock()
         private var subscription: Subscription?
         
-        init(object: RefBox, method: Method) {
+        private init(object: RefBox, method: Method) {
             self.object = object
             self.method = method
         }
@@ -156,22 +156,22 @@ extension Subscribers {
 
 extension Subscribers.Invoke {
     
-    convenience init(object: Target, method: @escaping (Target) -> (Input) -> Void) {
+    public convenience init(object: Target, method: @escaping (Target) -> (Input) -> Void) {
         self.init(object: .strong(object), method: .withParameter(method))
     }
     
-    convenience init(objectNoRetain object: Target, method: @escaping (Target) -> (Input) -> Void) {
+    public convenience init(objectNoRetain object: Target, method: @escaping (Target) -> (Input) -> Void) {
         self.init(object: .weak(object), method: .withParameter(method))
     }
 }
 
 extension Subscribers.Invoke where Input == Void {
     
-    convenience init(object: Target, method: @escaping (Target) -> () -> Void) {
+    public convenience init(object: Target, method: @escaping (Target) -> () -> Void) {
         self.init(object: .strong(object), method: .withoutParameter(method))
     }
     
-    convenience init(objectNoRetain object: Target, method: @escaping (Target) -> () -> Void) {
+    public convenience init(objectNoRetain object: Target, method: @escaping (Target) -> () -> Void) {
         self.init(object: .weak(object), method: .withoutParameter(method))
     }
 }
