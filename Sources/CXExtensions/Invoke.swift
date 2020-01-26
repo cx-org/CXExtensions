@@ -10,7 +10,7 @@ extension Publisher where Failure == Never {
     }
     
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> (Output) -> Void, weaklyOn object: Target) -> AnyCancellable {
-        let invoke = Subscribers.Invoke(objectNoRetain: object, method: method)
+        let invoke = Subscribers.Invoke(nonretainedObject: object, method: method)
         self.subscribe(invoke)
         return AnyCancellable(invoke)
     }
@@ -25,7 +25,7 @@ extension Publisher where Output == Void, Failure == Never {
     }
     
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> () -> Void, weaklyOn object: Target) -> AnyCancellable {
-        let invoke = Subscribers.Invoke(objectNoRetain: object, method: method)
+        let invoke = Subscribers.Invoke(nonretainedObject: object, method: method)
         self.subscribe(invoke)
         return AnyCancellable(invoke)
     }
@@ -160,7 +160,7 @@ extension Subscribers.Invoke {
         self.init(object: .strong(object), method: .withParameter(method))
     }
     
-    public convenience init(objectNoRetain object: Target, method: @escaping (Target) -> (Input) -> Void) {
+    public convenience init(nonretainedObject object: Target, method: @escaping (Target) -> (Input) -> Void) {
         self.init(object: .weak(object), method: .withParameter(method))
     }
 }
@@ -171,7 +171,7 @@ extension Subscribers.Invoke where Input == Void {
         self.init(object: .strong(object), method: .withoutParameter(method))
     }
     
-    public convenience init(objectNoRetain object: Target, method: @escaping (Target) -> () -> Void) {
+    public convenience init(nonretainedObject object: Target, method: @escaping (Target) -> () -> Void) {
         self.init(object: .weak(object), method: .withoutParameter(method))
     }
 }
