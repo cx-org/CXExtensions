@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "CXExtensions",
+    platforms: [
+        .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v2),
+    ],
     products: [
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
@@ -22,3 +25,47 @@ let package = Package(
             dependencies: ["CXExtensions", "CXTest", "Quick", "Nimble"]),
     ]
 )
+
+enum CombineImplementation {
+    
+    case combine
+    case combineX
+    case openCombine
+    
+    static var `default`: CombineImplementation {
+        #if canImport(Combine)
+        return .combine
+        #else
+        return .combineX
+        #endif
+    }
+    
+    init?(_ description: String) {
+        let desc = description.lowercased().filter { $0.isLetter }
+        switch desc {
+        case "combine":     self = .combine
+        case "combinex":    self = .combineX
+        case "opencombine": self = .openCombine
+        default:            return nil
+        }
+    }
+}
+
+extension ProcessInfo {
+
+    var combineImplementation: CombineImplementation {
+        return environment["CX_COMBINE_IMPLEMENTATION"].flatMap(CombineImplementation.init) ?? .default
+    }
+    
+    var isCI: Bool {
+        return (environment["CX_CONTINUOUS_INTEGRATION"] as NSString?)?.boolValue ?? false
+    }
+}
+
+import Foundation
+
+let info = ProcessInfo.processInfo
+// FIXME: CXTest only available with CX_CONTINUOUS_INTEGRATION
+if info.combineImplementation == .combine, info.isCI {
+    package.platforms = [.macOS("10.15"), .iOS("13.0"), .tvOS("13.0"), .watchOS("6.0")]
+}
