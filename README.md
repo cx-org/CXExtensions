@@ -1,5 +1,6 @@
 # CXExtensions
 
+[![GitHub CI](https://github.com/cx-org/CXExtensions/workflows/CI/badge.svg)](https://github.com/cx-org/CXExtensions/actions)
 [![Release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)](https://github.com/cx-org/CXExtensions/releases)
 ![Install](https://img.shields.io/badge/install-Swift_PM%20%7C%20CocoaPods-ff69b4)
 ![Supported Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey)
