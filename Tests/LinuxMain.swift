@@ -1,7 +1,11 @@
+import Quick
 import XCTest
 
-import CXExtensionsTests
+@testable import CXExtensionsTests
 
-var tests = [XCTestCaseEntry]()
-tests += CXExtensionsTests.allTests()
-XCTMain(tests)
+QCKMain([
+    DelayedAutoCancellableSpec.self,
+    IgnoreErrorSpec.self,
+    InvokeSpec.self,
+    WeakAssignSpec.self,
+])
