@@ -66,6 +66,6 @@ import Foundation
 
 let info = ProcessInfo.processInfo
 // FIXME: CXTest only available with CX_CONTINUOUS_INTEGRATION
-if info.combineImplementation == .combine, info.isCI {
+if info.combineImplementation == .combine {
     package.platforms = [.macOS("10.15"), .iOS("13.0"), .tvOS("13.0"), .watchOS("6.0")]
 }
