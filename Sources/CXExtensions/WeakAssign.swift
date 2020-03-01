@@ -1,5 +1,5 @@
 import CXShim
-import CXUtility
+import Foundation
 
 extension Publisher where Failure == Never {
     
@@ -20,7 +20,7 @@ extension Subscribers {
         
         public let keyPath: ReferenceWritableKeyPath<Root, Input>
         
-        private let lock = Lock()
+        private let lock = NSLock()
         private var subscription: Subscription?
         
         public init(object: Root, keyPath: ReferenceWritableKeyPath<Root, Input>) {

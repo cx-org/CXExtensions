@@ -1,5 +1,5 @@
 import CXShim
-import CXUtility
+import Foundation
 
 extension Publisher where Failure == Never {
     
@@ -81,7 +81,7 @@ extension Subscribers {
         
         private let method: Method
         
-        private let lock = Lock()
+        private let lock = NSLock()
         private var subscription: Subscription?
         
         private init(object: RefBox, method: Method) {
