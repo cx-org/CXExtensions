@@ -10,7 +10,29 @@ A collection of useful extensions for Combine.
 
 CXExtensions is [Combine Compatible Package](https://github.com/cx-org/CombineX/wiki/Combine-Compatible-Package). You're free to switch underlying Combine implementation between [CombineX](https://github.com/cx-org/CombineX) and [Combine](https://developer.apple.com/documentation/combine).
 
-## API
+## Installation
+
+### Requirements
+
+- Swift 5.0 (Xcode 10.2)
+
+#### Swift Package Manager
+
+```swift
+package.dependencies += [
+    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.2.0")),
+]
+```
+
+
+## Operators
+
+- [IgnoreError](#IgnoreError)
+- [WeakAssign](#WeakAssign)
+- [Invoke](#Invoke)
+- [DelayedAutoCancellable](#DelayedAutoCancellable)
+
+---
 
 #### IgnoreError
 
@@ -24,6 +46,27 @@ let upstream = URLSession.shared.cx.dataTaskPublisher(for: url)
 let pub = upstream.ignoreError()
 ```
 
+#### WeakAssign
+
+Like `Subscribers.Assign`, but capture its target weakly.
+
+```swift
+pub.assign(to: \.output, weaklyOn: self)
+```
+
+#### Invoke
+
+Invoke method on an object with each element from a Publisher.
+
+```swift
+pub.invoke(handleOutput, weaklyOn: self)
+//  Substitute for the following common pattern:
+//
+//      pub.sink { [weak self] output in
+//          self?.handleOutput(output)
+//      }
+```
+
 #### DelayedAutoCancellable
 
 Auto cancel after delay.
@@ -34,26 +77,4 @@ let delayedCanceller = upstream
         print(o)
     }
     .cancel(after .second(1), scheduler: DispatchQueue.main.cx)
-```
-
-## Get Started
-
-### Requirements
-
-- Swift 5.0 (Xcode 10.2)
-
-### Installation
-
-#### Swift Package Manager (Recommended)
-
-```swift
-package.dependencies.append(
-    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.1.0"))
-)
-```
-
-#### CocoaPods
-
-```ruby
-pod 'CXExtensions', '~> 0.1.0'
 ```
