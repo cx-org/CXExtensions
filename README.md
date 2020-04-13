@@ -30,6 +30,7 @@ package.dependencies += [
 - [IgnoreError](#IgnoreError)
 - [WeakAssign](#WeakAssign)
 - [Invoke](#Invoke)
+- [waitNext](#waitNext)
 - [DelayedAutoCancellable](#DelayedAutoCancellable)
 
 ---
@@ -65,6 +66,15 @@ pub.invoke(handleOutput, weaklyOn: self)
 //      pub.sink { [weak self] output in
 //          self?.handleOutput(output)
 //      }
+```
+
+#### waitNext
+
+Wait next event synchronously.
+
+```swift
+// value: Result<Output?, Failure>
+let value = pub.waitNext()
 ```
 
 #### DelayedAutoCancellable
