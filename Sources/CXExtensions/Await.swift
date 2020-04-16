@@ -1,5 +1,5 @@
 import CXShim
-import Foundation
+import CoreFoundation
 
 extension Publisher {
     
@@ -112,8 +112,15 @@ extension Subscribers {
                 demandingState = .demanding(CFRunLoopGetCurrent())
                 lock.unlock()
                 subscription.request(.max(1))
+                #if canImport(Darwin)
+                let runLoopMode = CFRunLoopMode.defaultMode
+                let result = CFRunLoopRunResult.stopped
+                #else
+                let runLoopMode = kCFRunLoopDefaultMode
+                let result = kCFRunLoopRunStopped
+                #endif
                 while true {
-                    guard CFRunLoopRunInMode(.defaultMode, .infinity, false) == .stopped else {
+                    guard CFRunLoopRunInMode(runLoopMode, .infinity, false) == result else {
                         continue
                     }
                     lock.lock()
