@@ -1,4 +1,5 @@
 import CXShim
+import Foundation
 import CoreFoundation
 
 extension Publisher {
