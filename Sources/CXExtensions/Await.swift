@@ -108,6 +108,7 @@ extension Subscribers {
                 lock.unlock()
                 fatalError()
             case .finished, .cancelled:
+                lock.unlock()
                 return nil
             case let .connected(subscription):
                 demandingState = .demanding(CFRunLoopGetCurrent())
