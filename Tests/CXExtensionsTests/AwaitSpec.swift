@@ -2,6 +2,7 @@ import Foundation
 import Dispatch
 import Quick
 import Nimble
+import CXTest
 import CXShim
 import CXExtensions
 
@@ -29,7 +30,15 @@ final class AwaitSpec: QuickSpec {
                 let value = pub.sync().next()
                 expect(value).to(beNil())
             }
-            it("should not block current runloop") {
+            it("should be sequence") {
+                let source = Array(0..<10)
+                let pub = source.cx.publisher
+                let sub = pub.sync()
+                let result = Array(sub)
+                expect(result) == source
+            }
+            // TODO: non blocking Await
+            xit("should not block current runloop") {
                 let pub = PassthroughSubject<Int, Never>()
                 RunLoop.current.cx.schedule {
                     pub.send(1)
