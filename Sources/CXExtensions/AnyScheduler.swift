@@ -57,15 +57,15 @@ public final class AnyScheduler: Scheduler {
     }
     
     public func schedule(options: SchedulerOptions?, _ action: @escaping () -> Void) {
-        self._schedule_action(action)
+        return _schedule_action(action)
     }
     
     public func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) {
-        self._schedule_after_tolerance_action(date, tolerance, action)
+        return _schedule_after_tolerance_action(date, tolerance, action)
     }
     
     public func schedule(after date: SchedulerTimeType, interval: SchedulerTimeType.Stride, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
-        return self._schedule_after_interval_tolerance_action(date, interval, tolerance, action)
+        return _schedule_after_interval_tolerance_action(date, interval, tolerance, action)
     }
 }
 
@@ -102,8 +102,8 @@ public struct AnySchedulerTimeType: Strideable {
         
         private var wrapped: Wrapped
         
-        private init(_ content: Wrapped) {
-            self.wrapped = content
+        private init(_ value: Wrapped) {
+            wrapped = value
         }
         
         fileprivate init<T: Comparable & SignedNumeric & SchedulerTimeIntervalConvertible>(wrapping opaque: T) {
