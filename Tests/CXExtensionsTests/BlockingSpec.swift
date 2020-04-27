@@ -6,7 +6,7 @@ import CXTest
 import CXShim
 import CXExtensions
 
-final class AwaitSpec: QuickSpec {
+final class BlockingSpec: QuickSpec {
     
     override func spec() {
         // TODO: thread method polyfill
@@ -17,7 +17,7 @@ final class AwaitSpec: QuickSpec {
                     Thread.sleep(forTimeInterval: 0.01)
                     pub.send(1)
                 }
-                let value = pub.sync().next()
+                let value = pub.blocking().next()
                 expect(value) == 1
             }
             
@@ -27,13 +27,13 @@ final class AwaitSpec: QuickSpec {
                     Thread.sleep(forTimeInterval: 0.01)
                     pub.send(completion: .failure(.e0))
                 }
-                let value = pub.sync().next()
+                let value = pub.blocking().next()
                 expect(value).to(beNil())
             }
             it("should be sequence") {
                 let source = Array(0..<10)
                 let pub = source.cx.publisher
-                let sub = pub.sync()
+                let sub = pub.blocking()
                 let result = Array(sub)
                 expect(result) == source
             }
@@ -43,7 +43,7 @@ final class AwaitSpec: QuickSpec {
                 RunLoop.current.cx.schedule {
                     pub.send(1)
                 }
-                let value = pub.sync().next()
+                let value = pub.blocking().next()
                 expect(value) == 1
             }
         }

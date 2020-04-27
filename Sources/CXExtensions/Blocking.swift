@@ -5,8 +5,8 @@ import CoreFoundation
 
 extension Publisher {
     
-    public func sync() -> Subscribers.Await<Output, Failure> {
-        let await = Subscribers.Await<Output, Failure>()
+    public func blocking() -> Subscribers.Blocking<Output, Failure> {
+        let await = Subscribers.Blocking<Output, Failure>()
         self.subscribe(await)
         return await
     }
@@ -14,7 +14,7 @@ extension Publisher {
 
 extension Subscribers {
     
-    public class Await<Input, Failure: Error>: Subscriber, Cancellable, Sequence, IteratorProtocol {
+    public class Blocking<Input, Failure: Error>: Subscriber, Cancellable, Sequence, IteratorProtocol {
         
         private enum SubscribingState {
             case awaitingSubscription
