@@ -33,6 +33,18 @@ extension Subscribers {
         private var subscribingState = SubscribingState.awaitingSubscription
         private var demandingState = DemandingState.idle
         
+        // @testable
+        var completion: Subscribers.Completion<Failure>? {
+            lock.lock()
+            defer { lock.unlock() }
+            switch subscribingState {
+            case let  .finished(completion):
+                return completion
+            default:
+                return nil
+            }
+        }
+        
         public init() {}
         
         public func receive(subscription: Subscription) {
@@ -50,7 +62,7 @@ extension Subscribers {
             lock.lock()
             guard case .demanding = demandingState else {
                 lock.unlock()
-                fatalError()
+                preconditionFailure("upstream publisher send more value than demand")
             }
             lockedSignal(input)
             return .none
@@ -61,7 +73,7 @@ extension Subscribers {
             switch subscribingState {
             case .awaitingSubscription:
                 lock.unlock()
-                fatalError()
+                preconditionFailure("receive completion before subscribing")
             case .finished, .cancelled:
                 lock.unlock()
                 return
@@ -96,12 +108,12 @@ extension Subscribers {
             lock.lock()
             guard case .idle = demandingState else {
                 lock.unlock()
-                fatalError()
+                preconditionFailure("simultaneous access by different threads")
             }
             switch subscribingState {
             case .awaitingSubscription:
                 lock.unlock()
-                fatalError()
+                preconditionFailure("request value before subscribing")
             case .finished, .cancelled:
                 lock.unlock()
                 return nil
