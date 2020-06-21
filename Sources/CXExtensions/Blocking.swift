@@ -5,6 +5,19 @@ import CoreFoundation
 
 extension Publisher {
     
+    /// Get element from a publisher synchronously.
+    ///
+    /// Calling this method itself is not blocking. Request next value is
+    /// blocking, however.
+    ///
+    ///     let subscriber = publisher.blocking() // not blocking
+    ///
+    ///     let value = subscriber.next() // blocking
+    ///
+    ///     for value in subscriber { // blocking
+    ///         print(value)
+    ///     }
+    ///
     public func blocking() -> Subscribers.Blocking<Output, Failure> {
         let await = Subscribers.Blocking<Output, Failure>()
         self.subscribe(await)
@@ -14,6 +27,14 @@ extension Publisher {
 
 extension Subscribers {
     
+    /// A subscriber that transform asynchronous `Publisher` to synchronous
+    /// `Sequence`.
+    ///
+    /// When you request a value by calling `next()` method, the subscriber
+    /// request one value from upstream publisher, blocks current thread until
+    /// upstream publisher produces an element or terminates.
+    ///
+    /// Simultaneous access by different threads is not allowed.
     public class Blocking<Input, Failure: Error>: Subscriber, Cancellable, Sequence, IteratorProtocol {
         
         private enum SubscribingState {
@@ -106,6 +127,8 @@ extension Subscribers {
         
         public func next() -> Input? {
             lock.lock()
+            // TODO: calling next() simultaneously from different thread.
+            // We need to store multiple `DispatchSemaphore`.
             guard case .idle = demandingState else {
                 lock.unlock()
                 preconditionFailure("simultaneous access by different threads")
