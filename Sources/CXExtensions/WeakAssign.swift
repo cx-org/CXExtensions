@@ -3,6 +3,8 @@ import Foundation
 
 extension Publisher where Failure == Never {
     
+    /// Assigns a publisher’s output to a property of an object. The object is
+    /// weakly captured.
     public func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Output>, weaklyOn object: Root) -> AnyCancellable {
         let assign = Subscribers.WeakAssign(object: object, keyPath: keyPath)
         self.subscribe(assign)
@@ -12,12 +14,15 @@ extension Publisher where Failure == Never {
 
 extension Subscribers {
     
+    /// Similar to `Subscribers.Assign`, but captures its target weakly.
     public final class WeakAssign<Root: AnyObject, Input>: Subscriber, Cancellable, CustomStringConvertible, CustomReflectable, CustomPlaygroundDisplayConvertible {
         
         public typealias Failure = Never
         
+        /// The object that contains the property to assign.
         public private(set) weak var object: Root?
         
+        /// The key path that indicates the property to assign.
         public let keyPath: ReferenceWritableKeyPath<Root, Input>
         
         private let lock = NSLock()

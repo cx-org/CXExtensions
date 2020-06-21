@@ -3,12 +3,15 @@ import Foundation
 
 extension Publisher where Failure == Never {
     
+    /// Invokes method on an object with a publisher's output.
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> (Output) -> Void, on object: Target) -> AnyCancellable {
         let invoke = Subscribers.Invoke(object: object, method: method)
         self.subscribe(invoke)
         return AnyCancellable(invoke)
     }
     
+    /// Invokes method on an object with a publisher's output. The object is
+    /// weakly captured.
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> (Output) -> Void, weaklyOn object: Target) -> AnyCancellable {
         let invoke = Subscribers.Invoke(nonretainedObject: object, method: method)
         self.subscribe(invoke)
@@ -18,12 +21,15 @@ extension Publisher where Failure == Never {
 
 extension Publisher where Output == Void, Failure == Never {
     
+    /// Invokes method on an object whenever a publisher produces an output.
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> () -> Void, on object: Target) -> AnyCancellable {
         let invoke = Subscribers.Invoke(object: object, method: method)
         self.subscribe(invoke)
         return AnyCancellable(invoke)
     }
     
+    /// Invokes method on an object whenever a publisher produces an output. The
+    /// object is weakly captured.
     public func invoke<Target: AnyObject>(_ method: @escaping (Target) -> () -> Void, weaklyOn object: Target) -> AnyCancellable {
         let invoke = Subscribers.Invoke(nonretainedObject: object, method: method)
         self.subscribe(invoke)
@@ -33,6 +39,8 @@ extension Publisher where Output == Void, Failure == Never {
 
 extension Subscribers {
     
+    /// A simple subscriber that invokes method on an object with each element
+    /// received from a `Publisher`.
     public final class Invoke<Target: AnyObject, Input>: Subscriber, Cancellable, CustomStringConvertible, CustomReflectable, CustomPlaygroundDisplayConvertible {
         
         public typealias Failure = Never
