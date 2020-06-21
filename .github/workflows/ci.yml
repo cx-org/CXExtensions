@@ -18,8 +18,9 @@ jobs:
   mac:
     strategy:
       matrix:
-        xcode_version: ['11', '11.1', '11.2', '11.3']
+        xcode_version: ['11', '11.5']
     runs-on: macOS-latest
+    timeout-minutes: 10
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app/Contents/Developer
       CX_COMBINE_IMPLEMENTATION: CombineX
@@ -37,8 +38,9 @@ jobs:
   linux:
     strategy:
       matrix:
-        swift_version: ['5.1', 'latest']
+        swift_version: ['5.1', '5.2', 'latest']
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     container:
       image: swift:${{ matrix.swift_version }}
     steps:
@@ -53,6 +55,7 @@ jobs:
 
   combine:
     runs-on: macOS-latest
+    timeout-minutes: 10
     env:
       CX_COMBINE_IMPLEMENTATION: Combine
       CX_CONTINUOUS_INTEGRATION: "YES"
