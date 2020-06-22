@@ -4,6 +4,7 @@ import XCTest
 @testable import CXExtensionsTests
 
 QCKMain([
+    AnySchedulerSpec.self,
     BlockingSpec.self,
     DelayedAutoCancellableSpec.self,
     IgnoreErrorSpec.self,
