@@ -5,6 +5,7 @@ import XCTest
 
 QCKMain([
     AnySchedulerSpec.self,
+    BlockingSpec.self,
     DelayedAutoCancellableSpec.self,
     IgnoreErrorSpec.self,
     InvokeSpec.self,

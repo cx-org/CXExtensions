@@ -30,6 +30,7 @@ package.dependencies += [
 - [IgnoreError](#IgnoreError)
 - [WeakAssign](#WeakAssign)
 - [Invoke](#Invoke)
+- [Blocking](#Blocking)
 - [DelayedAutoCancellable](#DelayedAutoCancellable)
 
 ---
@@ -56,7 +57,7 @@ pub.assign(to: \.output, weaklyOn: self)
 
 #### Invoke
 
-Invoke method on an object with each element from a Publisher.
+Invoke method on an object with each element from a `Publisher`.
 
 ```swift
 pub.invoke(handleOutput, weaklyOn: self)
@@ -65,6 +66,17 @@ pub.invoke(handleOutput, weaklyOn: self)
 //      pub.sink { [weak self] output in
 //          self?.handleOutput(output)
 //      }
+```
+
+#### Blocking
+
+Get element from a `Publisher` synchronously. It's useful for command line tool and unit testing.
+
+```swift
+let sequence = pub.blocking()
+for value in sequence {
+    // process value
+}
 ```
 
 #### DelayedAutoCancellable
