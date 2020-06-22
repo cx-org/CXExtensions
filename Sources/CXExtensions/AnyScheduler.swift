@@ -19,6 +19,19 @@ private enum SchedulerTimeLiteral {
     }
 }
 
+/// A type-erasing scheduler.
+///
+/// Do not use `SchedulerTimeType` across different `AnyScheduler` instance.
+///
+///     let scheduler1 = AnyScheduler(DispatchQueue.main.cx)
+///     let scheduler2 = AnyScheduler(RunLoop.main.cx)
+///
+///     let time1 = scheduler1.now
+///     let time2 = scheduler2.now
+///
+///     // DON'T DO THIS!
+///     time1.distance(to: time2) // Will crash.
+///
 public final class AnyScheduler: Scheduler {
 
     public typealias SchedulerOptions = Never
