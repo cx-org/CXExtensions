@@ -1,30 +1,47 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.2
 
 import PackageDescription
 
 let package = Package(
     name: "CXExtensions",
     platforms: [
-        .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v2),
+        .macOS(.v10_10),
+        .iOS(.minimalToolChainSupported),
+        .tvOS(.v9),
+        .watchOS(.v2),
     ],
     products: [
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.2.0")),
-        .package(url: "https://github.com/Quick/Quick.git", from: "2.0.0"),
-        // TODO: Use "8.0.2" until https://github.com/Quick/Nimble/issues/705 is fixed.
-        .package(url: "https://github.com/Quick/Nimble.git", .exact("8.0.2")),
+        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/Quick/Quick.git", from: "3.0.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0"),
     ],
     targets: [
         .target(
             name: "CXExtensions",
-            dependencies: ["CXShim"]),
+            dependencies: [
+                .product(name: "CXShim", package: "CombineX")
+            ]),
         .testTarget(
             name: "CXExtensionsTests",
-            dependencies: ["CXExtensions", "CXTest", "Quick", "Nimble"]),
+            dependencies: [
+                "CXExtensions",
+                "Quick",
+                "Nimble",
+                .product(name: "CXTest", package: "CombineX"),
+            ]),
     ]
 )
+
+extension SupportedPlatform.IOSVersion {
+    #if compiler(>=5.3)
+    static var minimalToolChainSupported = SupportedPlatform.IOSVersion.v9
+    #else
+    static var minimalToolChainSupported = SupportedPlatform.IOSVersion.v8
+    #endif
+}
 
 enum CombineImplementation {
     
