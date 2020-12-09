@@ -14,13 +14,13 @@ CXExtensions is [Combine Compatible Package](https://github.com/cx-org/CombineX/
 
 ### Requirements
 
-- Swift 5.0 (Xcode 10.2)
+- Swift 5.2 (Xcode 11.4)
 
 #### Swift Package Manager
 
 ```swift
 package.dependencies += [
-    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.2.0")),
+    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.3.0")),
 ]
 ```
 
