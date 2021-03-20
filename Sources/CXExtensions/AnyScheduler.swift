@@ -1,23 +1,6 @@
 import CXShim
 
-private enum SchedulerTimeLiteral {
-    
-    case seconds(Int)
-    case milliseconds(Int)
-    case microseconds(Int)
-    case nanoseconds(Int)
-    case interval(Double)
-    
-    var timeInterval: Double {
-        switch self {
-        case let .seconds(s):       return Double(s)
-        case let .milliseconds(ms): return Double(ms) * 1_000
-        case let .microseconds(us): return Double(us) * 1_000_000
-        case let .nanoseconds(ns):  return Double(ns) * 1_000_000_000
-        case let .interval(s):      return s
-        }
-    }
-}
+// MARK: - AnyScheduler
 
 /// A type-erasing scheduler.
 ///
@@ -26,11 +9,8 @@ private enum SchedulerTimeLiteral {
 ///     let scheduler1 = AnyScheduler(DispatchQueue.main.cx)
 ///     let scheduler2 = AnyScheduler(RunLoop.main.cx)
 ///
-///     let time1 = scheduler1.now
-///     let time2 = scheduler2.now
-///
-///     // DON'T DO THIS!
-///     time1.distance(to: time2) // Will crash.
+///     // DON'T DO THIS! Will crash.
+///     scheduler2.schedule(after: scheduler1.now) { ... }
 ///
 public final class AnyScheduler: Scheduler {
 
@@ -82,7 +62,48 @@ public final class AnyScheduler: Scheduler {
     }
 }
 
+// MARK: - AnySchedulerTimeType
+
+/// A type-erasing SchedulerTimeType for AnyScheduler.
+///
+/// Instance of AnySchedulerTimeType from different scheduler is NOT
+/// interactable
+///
+///     let time1 = AnyScheduler(DispatchQueue.main.cx).now
+///     let time2 = AnyScheduler(RunLoop.main.cx).now
+///
+///     // DON'T DO THIS! Will crash.
+///     time1.distance(to: time2)
+///
 public struct AnySchedulerTimeType: Strideable {
+    
+    fileprivate let wrapped: Any
+    
+    private let _distance_to: (Any) -> Stride
+    private let _advanced_by: (Stride) -> AnySchedulerTimeType
+    
+    fileprivate init<T: Strideable>(wrapping opaque: T) where T.Stride: SchedulerTimeIntervalConvertible {
+        self.wrapped = opaque
+        self._distance_to = { other in
+            return Stride(wrapping: opaque.distance(to: other as! T))
+        }
+        self._advanced_by = { n in
+            return AnySchedulerTimeType(wrapping: opaque.advanced(by: n.asType(T.Stride.self)))
+        }
+    }
+    
+    public func distance(to other: AnySchedulerTimeType) -> Stride {
+        return _distance_to(other)
+    }
+    
+    public func advanced(by n: Stride) -> AnySchedulerTimeType {
+        return _advanced_by(n)
+    }
+}
+
+// MARK: - AnySchedulerTimeType.Stride
+
+extension AnySchedulerTimeType {
     
     public struct Stride: Comparable, SignedNumeric, SchedulerTimeIntervalConvertible {
         
@@ -126,7 +147,11 @@ public struct AnySchedulerTimeType: Strideable {
         fileprivate func asType<T: Comparable & SignedNumeric & SchedulerTimeIntervalConvertible>(_ type: T.Type) -> T {
             switch wrapped {
             case let .opaque(opaque):
-                return opaque.wrapped as! T
+                guard let result = opaque.wrapped as? T else {
+                    // TODO: message
+                    preconditionFailure()
+                }
+                return result
             case let .literal(literal):
                 return T.time(literal: literal)
             }
@@ -144,78 +169,71 @@ public struct AnySchedulerTimeType: Strideable {
         }
         
         public var magnitude: Stride {
-            // TODO: magnitude?
-            fatalError()
+            switch self.wrapped {
+            case .opaque:
+                // FIXME: magnitude?
+                fatalError()
+            case let .literal(v):
+                return .seconds(v.timeInterval.magnitude)
+            }
+        }
+        
+        private static func withWrapped<T>(_ lhs: Stride, _ rhs: Stride, body: (Opaque, Opaque) -> T, fallback: (SchedulerTimeLiteral, SchedulerTimeLiteral) -> T) -> T {
+            switch (lhs.wrapped, rhs.wrapped) {
+            case let (.opaque(l), .opaque(r)):
+                return body(l, r)
+            case let (.opaque(l), .literal(r)):
+                return body(l, l._init(r))
+            case let (.literal(l), .opaque(r)):
+                return body(r._init(l), r)
+            case let (.literal(l), .literal(r)):
+                return fallback(l, r)
+            }
         }
         
         public static func == (lhs: Stride, rhs: Stride) -> Bool {
-            switch (lhs.wrapped, rhs.wrapped) {
-            case let (.opaque(l), .opaque(r)):
-                return l._equalTo(r.wrapped)
-            case let (.opaque(l), .literal(r)):
-                return l._equalTo(l._init(r).wrapped)
-            case let (.literal(l), .opaque(r)):
-                return r._init(l)._equalTo(r.wrapped)
-            case let (.literal(l), .literal(r)):
+            return withWrapped(lhs, rhs, body: {
+                $0._equalTo($1.wrapped)
+            }, fallback: {
                 // TODO: potential precision loss
-                return l.timeInterval == r.timeInterval
-            }
+                $0.timeInterval == $1.timeInterval
+            })
         }
         
         public static func < (lhs: Stride, rhs: Stride) -> Bool {
-            switch (lhs.wrapped, rhs.wrapped) {
-            case let (.opaque(l), .opaque(r)):
-                return l._lessThan(r.wrapped)
-            case let (.opaque(l), .literal(r)):
-                return l._lessThan(l._init(r).wrapped)
-            case let (.literal(l), .opaque(r)):
-                return r._init(l)._lessThan(r.wrapped)
-            case let (.literal(l), .literal(r)):
+            return withWrapped(lhs, rhs, body: {
+                $0._lessThan($1.wrapped)
+            }, fallback: {
                 // TODO: potential precision loss
-                return l.timeInterval < r.timeInterval
-            }
+                $0.timeInterval < $1.timeInterval
+            })
         }
         
         public static func + (lhs: Stride, rhs: Stride) -> Stride {
-            switch (lhs.wrapped, rhs.wrapped) {
-            case let (.opaque(l), .opaque(r)):
-                return .init(.opaque(l._add(r.wrapped)))
-            case let (.opaque(l), .literal(r)):
-                return .init(.opaque(l._add(l._init(r).wrapped)))
-            case let (.literal(l), .opaque(r)):
-                return .init(.opaque(r._init(l)._add(r.wrapped)))
-            case let (.literal(l), .literal(r)):
+            return withWrapped(lhs, rhs, body: {
+                .init(.opaque($0._add($1.wrapped)))
+            }, fallback: {
                 // TODO: potential precision loss
-                return .seconds(l.timeInterval + r.timeInterval)
-            }
+                .seconds($0.timeInterval + $1.timeInterval)
+            })
         }
         
         public static func - (lhs: Stride, rhs: Stride) -> Stride {
-            switch (lhs.wrapped, rhs.wrapped) {
-            case let (.opaque(l), .opaque(r)):
-                return .init(.opaque(l._subtract(r.wrapped)))
-            case let (.opaque(l), .literal(r)):
-                return .init(.opaque(l._subtract(l._init(r).wrapped)))
-            case let (.literal(l), .opaque(r)):
-                return .init(.opaque(r._init(l)._subtract(r.wrapped)))
-            case let (.literal(l), .literal(r)):
+            return withWrapped(lhs, rhs, body: {
+                .init(.opaque($0._subtract($1.wrapped)))
+            }, fallback: {
                 // TODO: potential precision loss
-                return .seconds(l.timeInterval - r.timeInterval)
-            }
+                .seconds($0.timeInterval - $1.timeInterval)
+            })
         }
         
         public static func * (lhs: Stride, rhs: Stride) -> Stride {
-            switch (lhs.wrapped, rhs.wrapped) {
-            case let (.opaque(l), .opaque(r)):
-                return .init(.opaque(l._multiply(r.wrapped)))
-            case let (.opaque(l), .literal(r)):
-                return .init(.opaque(l._multiply(l._init(r).wrapped)))
-            case let (.literal(l), .opaque(r)):
-                return .init(.opaque(r._init(l)._multiply(r.wrapped)))
-            case let (.literal(l), .literal(r)):
+            return withWrapped(lhs, rhs, body: {
+                .init(.opaque($0._multiply($1.wrapped)))
+            }, fallback: {
                 // TODO: potential precision loss
-                return .seconds(l.timeInterval * r.timeInterval)
-            }
+                .seconds($0.timeInterval * $1.timeInterval)
+            })
         }
         
         public static func += (lhs: inout Stride, rhs: Stride) {
@@ -250,28 +268,26 @@ public struct AnySchedulerTimeType: Strideable {
             return Stride(.literal(.nanoseconds(ns)))
         }
     }
+}
+
+// MARK: - SchedulerTimeLiteral
+
+private enum SchedulerTimeLiteral {
     
-    fileprivate let wrapped: Any
+    case seconds(Int)
+    case milliseconds(Int)
+    case microseconds(Int)
+    case nanoseconds(Int)
+    case interval(Double)
     
-    private let _distance_to: (Any) -> Stride
-    private let _advanced_by: (Stride) -> AnySchedulerTimeType
-    
-    fileprivate init<T: Strideable>(wrapping opaque: T) where T.Stride: SchedulerTimeIntervalConvertible {
-        self.wrapped = opaque
-        self._distance_to = { other in
-            return Stride(wrapping: opaque.distance(to: other as! T))
+    var timeInterval: Double {
+        switch self {
+        case let .seconds(s):       return Double(s)
+        case let .milliseconds(ms): return Double(ms) * 1_000
+        case let .microseconds(us): return Double(us) * 1_000_000
+        case let .nanoseconds(ns):  return Double(ns) * 1_000_000_000
+        case let .interval(s):      return s
         }
-        self._advanced_by = { n in
-            return AnySchedulerTimeType(wrapping: opaque.advanced(by: n.asType(T.Stride.self)))
-        }
-    }
-    
-    public func distance(to other: AnySchedulerTimeType) -> Stride {
-        return _distance_to(other)
-    }
-    
-    public func advanced(by n: Stride) -> AnySchedulerTimeType {
-        return _advanced_by(n)
     }
 }
 
