@@ -19,9 +19,9 @@ extension Publisher {
     ///     }
     ///
     public func blocking() -> Subscribers.Blocking<Output, Failure> {
-        let await = Subscribers.Blocking<Output, Failure>()
-        self.subscribe(await)
-        return await
+        let blocking = Subscribers.Blocking<Output, Failure>()
+        self.subscribe(blocking)
+        return blocking
     }
 }
 
