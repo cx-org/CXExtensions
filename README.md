@@ -30,6 +30,7 @@ package.dependencies += [
 - [IgnoreError](#IgnoreError)
 - [WeakAssign](#WeakAssign)
 - [Invoke](#Invoke)
+- [Signal](#Signal)
 - [Blocking](#Blocking)
 - [DelayedAutoCancellable](#DelayedAutoCancellable)
 
@@ -66,6 +67,15 @@ pub.invoke(handleOutput, weaklyOn: self)
 //      pub.sink { [weak self] output in
 //          self?.handleOutput(output)
 //      }
+```
+
+#### Signal
+
+Emits a signal (`Void()`) whenever upstream publisher produce an element. It's useful when you want `Invoke` a parameterless handler.
+
+```
+// Transform elements to signal first because `handleSignal` accept no argument.
+pub.signal().invoke(handleSignal, weaklyOn: self)
 ```
 
 #### Blocking

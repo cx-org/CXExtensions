@@ -2,6 +2,7 @@ import CXShim
 
 extension Publisher {
     
+    /// Emits a signal (`Void()`) whenever upstream publisher produce an element.
     public func signal() -> Publishers.Signal<Self> {
         return .init(upstream: self)
     }
@@ -9,6 +10,8 @@ extension Publisher {
 
 extension Publishers {
     
+    /// A publisher that emits a signal (`Void()`) whenever upstream publisher
+    /// produce an element.
     public struct Signal<Upstream: Publisher>: Publisher {
         
         public typealias Output = Void
