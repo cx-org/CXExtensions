@@ -1,23 +1,19 @@
-import Quick
-import Nimble
+import XCTest
 import CXTest
 import CXShim
 import CXExtensions
 
-final class IgnoreErrorSpec: QuickSpec {
+class IgnoreErrorTests: XCTest {
     
-    override func spec() {
-        
-        it("should ignore error") {
-            let pub = PassthroughSubject<Int, E>()
-            let sub = TracingSubscriber<Int, Never>(initialDemand: .unlimited)
-            pub.ignoreError().subscribe(sub)
-            expect(sub.events.count) == 1
-            pub.send(1)
-            expect(sub.events.count) == 2
-            pub.send(completion: .failure(.e0))
-            expect(sub.events.dropFirst()) == [.value(1), .completion(.finished)]
-        }
+    func testIgnoreError() {
+        let pub = PassthroughSubject<Int, E>()
+        let sub = TracingSubscriber<Int, Never>(initialDemand: .unlimited)
+        pub.ignoreError().subscribe(sub)
+        XCTAssertEqual(sub.events.count, 1)
+        pub.send(1)
+        XCTAssertEqual(sub.events.count, 2)
+        pub.send(completion: .failure(.e0))
+        XCTAssertEqual(sub.events.dropFirst(), [.value(1), .completion(.finished)])
     }
 }
 

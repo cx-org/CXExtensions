@@ -1,27 +1,23 @@
-import Quick
-import Nimble
+import XCTest
 import CXShim
 import CXExtensions
 
-final class WeakAssignSpec: QuickSpec {
+class WeakAssignTests: XCTest {
     
-    override func spec() {
-        
-        it("should not retain object") {
-            let pub = PassthroughSubject<Int, Never>()
-            weak var weakObj: AnyObject?
-            let connection: AnyCancellable
-            do {
-                let obj = A()
-                weakObj = obj
-                connection = pub.assign(to: \A.x, weaklyOn: obj)
-                expect(obj.events) == []
-                pub.send(1)
-                expect(obj.events) == [1]
-            }
-            expect(weakObj).to(beNil())
-            connection.cancel()
+    func testWeakRef() {
+        let pub = PassthroughSubject<Int, Never>()
+        weak var weakObj: AnyObject?
+        let connection: AnyCancellable
+        do {
+            let obj = A()
+            weakObj = obj
+            connection = pub.assign(to: \A.x, weaklyOn: obj)
+            XCTAssertEqual(obj.events, [])
+            pub.send(1)
+            XCTAssertEqual(obj.events, [1])
         }
+        XCTAssertNil(weakObj)
+        connection.cancel()
     }
 }
 

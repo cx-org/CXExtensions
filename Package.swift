@@ -9,14 +9,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/cx-org/CXShim", .branch("master")),
-        
         .package(url: "https://github.com/cx-org/CXTest", .branch("master")),
-        .package(url: "https://github.com/Quick/Quick.git", from: "3.0.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0"),
     ],
     targets: [
         .target(name: "CXExtensions", dependencies: ["CXShim"]),
-        .testTarget(name: "CXExtensionsTests", dependencies: ["CXExtensions", "CXTest", "Quick", "Nimble"]),
+        .testTarget(name: "CXExtensionsTests", dependencies: ["CXExtensions", "CXTest"]),
     ]
 )
 
