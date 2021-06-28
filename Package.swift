@@ -4,44 +4,21 @@ import PackageDescription
 
 let package = Package(
     name: "CXExtensions",
-    platforms: [
-        .macOS(.v10_10),
-        .iOS(.minimalToolChainSupported),
-        .tvOS(.v9),
-        .watchOS(.v2),
-    ],
     products: [
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/cx-org/CombineX", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/cx-org/CXShim", .branch("master")),
+        
+        .package(url: "https://github.com/cx-org/CXTest", .branch("master")),
         .package(url: "https://github.com/Quick/Quick.git", from: "3.0.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0"),
     ],
     targets: [
-        .target(
-            name: "CXExtensions",
-            dependencies: [
-                .product(name: "CXShim", package: "CombineX")
-            ]),
-        .testTarget(
-            name: "CXExtensionsTests",
-            dependencies: [
-                "CXExtensions",
-                "Quick",
-                "Nimble",
-                .product(name: "CXTest", package: "CombineX"),
-            ]),
+        .target(name: "CXExtensions", dependencies: ["CXShim"]),
+        .testTarget(name: "CXExtensionsTests", dependencies: ["CXExtensions", "CXTest", "Quick", "Nimble"]),
     ]
 )
-
-extension SupportedPlatform.IOSVersion {
-    #if compiler(>=5.3)
-    static var minimalToolChainSupported = SupportedPlatform.IOSVersion.v9
-    #else
-    static var minimalToolChainSupported = SupportedPlatform.IOSVersion.v8
-    #endif
-}
 
 enum CombineImplementation {
     
@@ -73,15 +50,12 @@ extension ProcessInfo {
     var combineImplementation: CombineImplementation {
         return environment["CX_COMBINE_IMPLEMENTATION"].flatMap(CombineImplementation.init) ?? .default
     }
-    
-    var isCI: Bool {
-        return (environment["CX_CONTINUOUS_INTEGRATION"] as NSString?)?.boolValue ?? false
-    }
 }
 
 import Foundation
 
-let info = ProcessInfo.processInfo
-if info.combineImplementation == .combine {
+let combineImpl = ProcessInfo.processInfo.combineImplementation
+
+if combineImpl == .combine {
     package.platforms = [.macOS("10.15"), .iOS("13.0"), .tvOS("13.0"), .watchOS("6.0")]
 }

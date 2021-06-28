@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "CombineX",
-        "repositoryURL": "https://github.com/cx-org/CombineX",
-        "state": {
-          "branch": null,
-          "revision": "96cd76ccddac5d0493ebd91d69f1e6e9ccb58f5f",
-          "version": "0.3.0"
-        }
-      },
-      {
         "package": "CwlCatchException",
         "repositoryURL": "https://github.com/mattgallagher/CwlCatchException.git",
         "state": {
@@ -26,6 +17,24 @@
           "branch": null,
           "revision": "02b7a39a99c4da27abe03cab2053a9034379639f",
           "version": "2.0.0"
+        }
+      },
+      {
+        "package": "CXShim",
+        "repositoryURL": "https://github.com/cx-org/CXShim",
+        "state": {
+          "branch": "master",
+          "revision": "16437bc62a3cfd967ab47d6d1808a5447f192697",
+          "version": null
+        }
+      },
+      {
+        "package": "CXTest",
+        "repositoryURL": "https://github.com/cx-org/CXTest",
+        "state": {
+          "branch": "master",
+          "revision": "73e7e10f502aab8c2a87f5cb16ada84f703dcbad",
+          "version": null
         }
       },
       {
