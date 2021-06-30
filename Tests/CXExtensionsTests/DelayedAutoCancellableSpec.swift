@@ -3,7 +3,7 @@ import CXTest
 import CXShim
 import CXExtensions
 
-class DelayedAutoCancellableTests: XCTest {
+class DelayedAutoCancellableTests: XCTestCase {
     
     func testCancel() {
         let pub = PassthroughSubject<Int, Never>()

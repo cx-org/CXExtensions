@@ -5,7 +5,7 @@ import CXTest
 import CXShim
 @testable import CXExtensions
 
-class BlockingTests: XCTest {
+class BlockingTests: XCTestCase {
     
     // TODO: `Thread.detachNewThread(_:)` has system requirement.
     @available(macOS 10.12, iOS 10.10, tvOS 10.10, watchOS 3.0, *)

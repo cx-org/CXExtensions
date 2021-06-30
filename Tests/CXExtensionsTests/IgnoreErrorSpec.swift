@@ -3,7 +3,7 @@ import CXTest
 import CXShim
 import CXExtensions
 
-class IgnoreErrorTests: XCTest {
+class IgnoreErrorTests: XCTestCase {
     
     func testIgnoreError() {
         let pub = PassthroughSubject<Int, E>()

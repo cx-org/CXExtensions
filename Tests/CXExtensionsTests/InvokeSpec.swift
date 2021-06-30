@@ -2,7 +2,7 @@ import XCTest
 import CXShim
 import CXExtensions
 
-class InvokeTests: XCTest {
+class InvokeTests: XCTestCase {
         
     func testStrongRef() {
         let pub = PassthroughSubject<Int, Never>()

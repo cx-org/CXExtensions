@@ -2,7 +2,7 @@ import XCTest
 import CXShim
 import CXExtensions
 
-class WeakAssignTests: XCTest {
+class WeakAssignTests: XCTestCase {
     
     func testWeakRef() {
         let pub = PassthroughSubject<Int, Never>()

@@ -3,7 +3,7 @@ import CXTest
 import CXShim
 import CXExtensions
 
-class AnySchedulerTests: XCTest {
+class AnySchedulerTests: XCTestCase {
     
     func testAnyScheduler() {
         let scheduler = VirtualTimeScheduler()
