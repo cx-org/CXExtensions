@@ -31,8 +31,9 @@ jobs:
 
   linux:
     strategy:
+      fail-fast: false
       matrix:
-        swift_version: ['5.2', '5.3']
+        swift_version: ['5.1', '5.2', '5.3', '5.4']
     runs-on: ubuntu-latest
     timeout-minutes: 10
     container:

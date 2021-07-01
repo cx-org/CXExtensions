@@ -14,7 +14,7 @@ CXExtensions is [Combine Compatible Package](https://github.com/cx-org/CombineX/
 
 ### Requirements
 
-- Swift 5.2 (Xcode 11.4)
+- Swift 5.0
 
 #### Swift Package Manager
 
