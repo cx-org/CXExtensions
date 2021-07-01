@@ -117,6 +117,7 @@ extension AnySchedulerTimeType {
             let _add: (Any) -> Opaque
             let _subtract: (Any) -> Opaque
             let _multiply: (Any) -> Opaque
+            let _magnitude: () -> Opaque
             
             init<T: Comparable & SignedNumeric & SchedulerTimeIntervalConvertible>(_ content: T) {
                 wrapped = content
@@ -126,6 +127,11 @@ extension AnySchedulerTimeType {
                 _add = { Opaque(content + ($0 as! T)) }
                 _subtract = { Opaque(content - ($0 as! T)) }
                 _multiply = { Opaque(content * ($0 as! T)) }
+                // Get magnitude and create Self from it. It's only possible on
+                // BinaryInteger or BinaryFloatingPoint, fail fast otherwise.
+                //
+                // This is the best we can do for arbitrary SignedNumeric type.
+                _magnitude = { Opaque(content.magnitudeAsSelfIfBinaryIntegerOrBinaryFloatingPoint!) }
             }
         }
         
@@ -170,9 +176,8 @@ extension AnySchedulerTimeType {
         
         public var magnitude: Stride {
             switch self.wrapped {
-            case .opaque:
-                // FIXME: magnitude?
-                fatalError()
+            case let .opaque(v):
+                return .init(.opaque(v._magnitude()))
             case let .literal(v):
                 return .seconds(v.timeInterval.magnitude)
             }
@@ -301,5 +306,38 @@ private extension SchedulerTimeIntervalConvertible {
         case let .nanoseconds(ns):  return .nanoseconds(ns)
         case let .interval(s):      return .seconds(s)
         }
+    }
+}
+
+// MARK: - Magnitude
+
+// https://gist.github.com/dabrahams/852dfdb0b628e68567b4d97499f196f9
+
+private struct Dispatch<Model> {
+    func apply<A, R0, R1>(_ a: A, _ f: (Model)->R0) -> R1 {
+        f(a as! Model) as! R1
+    }
+}
+
+private protocol BinaryIntegerDispatch {
+    func magnitude<N>(_: N) -> N
+}
+
+private protocol BinaryFloatingPointDispatch {
+    func magnitude<N>(_: N) -> N
+}
+
+extension Dispatch: BinaryIntegerDispatch where Model: BinaryInteger {
+    func magnitude<N>(_ x: N) -> N { apply(x) { Model($0.magnitude) } }
+}
+
+extension Dispatch: BinaryFloatingPointDispatch where Model: BinaryFloatingPoint {
+    func magnitude<N>(_ x: N) -> N { apply(x) { Model($0.magnitude) } }
+}
+
+private extension SignedNumeric {
+    var magnitudeAsSelfIfBinaryIntegerOrBinaryFloatingPoint: Self? {
+        (Dispatch<Self>() as? BinaryIntegerDispatch)?.magnitude(self) ??
+        (Dispatch<Self>() as? BinaryFloatingPointDispatch)?.magnitude(self)
     }
 }
