@@ -13,16 +13,16 @@ import CXShim
 ///     scheduler2.schedule(after: scheduler1.now) { ... }
 ///
 public final class AnyScheduler: Scheduler {
-
+    
     public typealias SchedulerOptions = Never
     public typealias SchedulerTimeType = AnySchedulerTimeType
-
+    
     private let _now: () -> SchedulerTimeType
     private let _minimumTolerance: () -> SchedulerTimeType.Stride
     private let _schedule_action: (@escaping () -> Void) -> Void
     private let _schedule_after_tolerance_action: (SchedulerTimeType, SchedulerTimeType.Stride, @escaping () -> Void) -> Void
     private let _schedule_after_interval_tolerance_action: (SchedulerTimeType, SchedulerTimeType.Stride, SchedulerTimeType.Stride, @escaping () -> Void) -> Cancellable
-
+    
     public init<S: Scheduler>(_ scheduler: S, options: S.SchedulerOptions? = nil) {
         _now = {
             SchedulerTimeType(wrapping: scheduler.now)
@@ -64,9 +64,9 @@ public final class AnyScheduler: Scheduler {
 
 // MARK: - AnySchedulerTimeType
 
-/// A type-erasing SchedulerTimeType for AnyScheduler.
+/// A type-erasing `SchedulerTimeType` for `AnyScheduler`.
 ///
-/// Instance of AnySchedulerTimeType from different scheduler is NOT
+/// Instance of `AnySchedulerTimeType` from different scheduler is NOT
 /// interactable
 ///
 ///     let time1 = AnyScheduler(DispatchQueue.main.cx).now
@@ -154,8 +154,7 @@ extension AnySchedulerTimeType {
             switch wrapped {
             case let .opaque(opaque):
                 guard let result = opaque.wrapped as? T else {
-                    // TODO: message
-                    preconditionFailure()
+                    preconditionFailure("Use AnySchedulerTimeType across different AnyScheduler instance is not supported.")
                 }
                 return result
             case let .literal(literal):
