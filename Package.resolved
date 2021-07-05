@@ -5,18 +5,18 @@
         "package": "CXShim",
         "repositoryURL": "https://github.com/cx-org/CXShim",
         "state": {
-          "branch": "master",
-          "revision": "16437bc62a3cfd967ab47d6d1808a5447f192697",
-          "version": null
+          "branch": null,
+          "revision": "82fecc246c7ca9f0ac1656b8199b7956e64d68f3",
+          "version": "0.4.0"
         }
       },
       {
         "package": "CXTest",
         "repositoryURL": "https://github.com/cx-org/CXTest",
         "state": {
-          "branch": "master",
-          "revision": "73e7e10f502aab8c2a87f5cb16ada84f703dcbad",
-          "version": null
+          "branch": null,
+          "revision": "929ce7cbd3005bc9356ae826bb65ee2611379b17",
+          "version": "0.4.0"
         }
       }
     ]

@@ -8,8 +8,8 @@ let package = Package(
         .library(name: "CXExtensions", targets: ["CXExtensions"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/cx-org/CXShim", .branch("master")),
-        .package(url: "https://github.com/cx-org/CXTest", .branch("master")),
+        .package(url: "https://github.com/cx-org/CXShim", .upToNextMinor(from: "0.4.0")),
+        .package(url: "https://github.com/cx-org/CXTest", .upToNextMinor(from: "0.4.0")),
     ],
     targets: [
         .target(name: "CXExtensions", dependencies: ["CXShim"]),
