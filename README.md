@@ -1,8 +1,7 @@
 # CXExtensions
 
 [![GitHub CI](https://github.com/cx-org/CXExtensions/workflows/CI/badge.svg)](https://github.com/cx-org/CXExtensions/actions)
-[![Release](https://img.shields.io/github/release-pre/cx-org/CXExtensions)](https://github.com/cx-org/CXExtensions/releases)
-![Install](https://img.shields.io/badge/install-Swift_PM%20%7C%20CocoaPods-ff69b4)
+![Install](https://img.shields.io/badge/install-Swift_Package_Manager-ff69b4)
 ![Supported Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey)
 [![Discord](https://img.shields.io/badge/chat-discord-9cf)](https://discord.gg/9vzqgZx)
 
@@ -12,18 +11,15 @@ CXExtensions is [Combine Compatible Package](https://github.com/cx-org/CombineX/
 
 ## Installation
 
-### Requirements
-
-- Swift 5.0
-
-#### Swift Package Manager
+Add the following line to the dependencies in your `Package.swift` file:
 
 ```swift
-package.dependencies += [
-    .package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.3.0")),
-]
+.package(url: "https://github.com/cx-org/CXExtensions", .upToNextMinor(from: "0.4.0")),
 ```
 
+#### Requirements
+
+- Swift 5.0
 
 ## Operators
 
